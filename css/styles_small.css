@@ -7,3 +7,11 @@
 .filter-options select {
     width: 100%;
 }
+
+#restaurant-info {
+    width: 100%;
+}
+
+.inside #map {
+    width: 100%;
+}
