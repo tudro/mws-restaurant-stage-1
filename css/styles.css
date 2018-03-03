@@ -128,7 +128,7 @@ nav h1 a {
     color: white;
     font-size: 1rem;
     font-weight: normal;
-    line-height: 1;
+    line-height: 1.2;
     margin: auto;
     width: 33%;
     text-align: center;
@@ -235,7 +235,7 @@ nav h1 a {
   letter-spacing: 0;
   margin: 15px 0 30px;
   text-transform: uppercase;
-  line-height: 1.1;
+  line-height: 1.2;
 }
 #restaurant-img {
 	width: 100%;
@@ -259,7 +259,7 @@ nav h1 a {
 #restaurant-container, #reviews-container {
   border-bottom: 1px solid #d9d9d9;
   border-top: 1px solid #fff;
-  padding: 140px 40px 30px;
+  padding: 120px 40px 30px;
   width: 50%;
 }
 #reviews-container {
@@ -305,4 +305,16 @@ nav h1 a {
 
 #restaurant-info {
     width: 33%;
+}
+
+@media screen and (max-width: 580px) {
+    #restaurant-name {
+        margin: 45px 0 15px;
+    }
+}
+
+@media screen and (max-width: 310px) {
+    #restaurant-name {
+        margin: 70px 0 15px;
+    }
 }
