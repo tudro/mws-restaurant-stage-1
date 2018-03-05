@@ -154,6 +154,18 @@ class DBHelper {
   }
 
   /**
+   * Restaurant optimized image URL.
+   */
+  static optImageUrlForRestaurant(restaurant, x) {
+    let imageName = restaurant.photograph;
+    if (typeof variable !== 'undefined') {
+      imageName = restaurant.photograph.subsrting(0, restaurant.photograph.indexOf('.jpg')) + '_' + x + '.jpg';
+    }
+
+    return (`/images/${imageName}`);
+  }
+
+  /**
    * Map marker for a restaurant.
    */
   static mapMarkerForRestaurant(restaurant, map) {
