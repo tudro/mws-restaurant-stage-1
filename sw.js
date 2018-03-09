@@ -1,9 +1,15 @@
-var staticCacheName = 'mws-rest-v25';
+var staticCacheName = 'mws-rest-v19';
+var contentImgsCache = 'mws-rest-imgs';
+var allCaches = [
+  staticCacheName,
+  contentImgsCache
+];
+
 self.addEventListener('install', function(e) {
   e.waitUntil(
     caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
-        '/offlineIndex.html',
+        '/',
         '/css/styles.css',
         '/css/styles_medium.css',
         '/css/styles_small.css',
@@ -17,6 +23,7 @@ self.addEventListener('install', function(e) {
         '/js/utils/matches-selector.js',
         '/js/utils/parseHTML.js',
         '/js/utils/simple-transition.js',
+        '/js/utils/focus-visible.js',
         '/js/views/Toasts.js',
         '/data/restaurants.json',
         'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700',
@@ -32,7 +39,7 @@ self.addEventListener('activate', function(event) {
     caches.keys().then(function (cacheNames) {
       return Promise.all(
         cacheNames.filter(function(cacheName) {
-          return cacheName.startsWith('mws-rest-') && cacheName != staticCacheName;
+          return cacheName.startsWith('mws-rest-') && !allCaches.includes(cacheName);
         }).map(function(cacheName) {
           return caches.delete(cacheNames);
         })
@@ -44,10 +51,14 @@ self.addEventListener('activate', function(event) {
 self.addEventListener('fetch', function(event) {
   var requestUrl = new URL(event.request.url);
   if (requestUrl.origin === location.origin) {
-    if (requestUrl.pathname === '/') {
-      event.respondWith(caches.match('offlineIndex.html'));
+    if (requestUrl.pathname.startsWith('/images/')) {
+      event.respondWith(servePhoto(event.request));
+      return;
+    } else if (requestUrl.pathname.includes('.html')) {
+      event.respondWith(servePage(event.request));
       return;
     }
+
   }
   event.respondWith(
     caches.match(event.request).then(function(response) {
@@ -55,6 +66,35 @@ self.addEventListener('fetch', function(event) {
     })
   );
 });
+
+function servePhoto(request) {
+  var storageUrl = request.url.replace(/_\d+x\.jpg$/, '');
+
+  return caches.open(contentImgsCache).then(function(cache) {
+    return cache.match(storageUrl).then(function(response) {
+      if (response) return response;
+
+      return fetch(request).then(function(networkResponse) {
+        cache.put(storageUrl, networkResponse.clone());
+        return networkResponse;
+      });
+    });
+  });
+}
+
+function servePage(request) {
+
+  return caches.open(staticCacheName).then(function(cache) {
+    return cache.match(request.url).then(function(response) {
+      if (response) return response;
+
+      return fetch(request).then(function(networkResponse) {
+        cache.put(request.url, networkResponse.clone());
+        return networkResponse;
+      });
+    });
+  });
+}
 
 self.addEventListener('message', function(event) {
   if (event.data.action == 'skipWaiting') {

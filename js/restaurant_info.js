@@ -5,20 +5,26 @@ let map;
  * Initialize Google map, called from HTML.
  */
 window.initMap = () => {
+  if (self.restaurant) {
+    self.map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 16,
+      center: self.restaurant.latlng,
+      scrollwheel: false
+    });
+    DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+  }
+};
+
+document.addEventListener('DOMContentLoaded', (event) => {
   fetchRestaurantFromURL((error, restaurant) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: restaurant.latlng,
-        scrollwheel: false
-      });
       fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
     }
   });
-};
+});
+
 
 /**
  * Get current restaurant from page URL.
@@ -72,7 +78,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const image = document.createElement('img');
   image.id = 'restaurant-img';
   image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.src = DBHelper.optImageUrlForRestaurant(restaurant);
   image.alt = restaurant.photoDesc;
   image.tabIndex = 0;
   picture.append(image);
