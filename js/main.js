@@ -10,6 +10,7 @@ markers = [];
 document.addEventListener('DOMContentLoaded', (event) => {
   fetchNeighborhoods();
   fetchCuisines();
+  updateRestaurants();
 });
 
 /**
@@ -80,7 +81,6 @@ window.initMap = () => {
     center: loc,
     scrollwheel: false
   });
-  updateRestaurants();
 };
 
 /**
@@ -126,9 +126,16 @@ resetRestaurants = (restaurants) => {
  */
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const ul = document.getElementById('restaurants-list');
-  restaurants.forEach(restaurant => {
-    ul.append(createRestaurantHTML(restaurant));
-  });
+  if (restaurants.length > 0) {
+    restaurants.forEach(restaurant => {
+      ul.append(createRestaurantHTML(restaurant));
+    });
+  } else {
+    const text = document.createElement('p');
+    text.innerHTML = 'No restaurants match the selected filters!';
+    text.tabIndex = 0;
+    ul.append(text);
+  }
   addMarkersToMap();
 };
 
@@ -137,6 +144,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
+
 
   const picture = document.createElement('picture');
 

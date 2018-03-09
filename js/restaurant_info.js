@@ -57,7 +57,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   address.innerHTML = restaurant.address;
   address.tabIndex = 0;
 
-  const picture = document.getElementById('restaurant-img');
+  const picture = document.getElementById('restaurant-picture');
 
   const sourceSmall = document.createElement('source');
   sourceSmall.media = '(max-width: 400px)';

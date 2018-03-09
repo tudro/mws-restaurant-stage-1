@@ -7,15 +7,19 @@
   },
   "devDependencies": {
     "grunt": "~0.4.5",
+    "grunt-contrib-clean": "~0.6.0",
+    "grunt-contrib-copy": "~0.8.0",
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-nodeunit": "~0.4.1",
     "grunt-contrib-uglify": "~0.5.0",
-    "grunt-contrib-clean": "~0.6.0",
     "grunt-mkdir": "~0.1.2",
-    "grunt-contrib-copy": "~0.8.0"
+    "simple-transition": "^1.0.0"
   },
   "dependencies": {
+    "closest": "0.0.1",
     "focus-visible": "^4.1.0",
-    "grunt-responsive-images": "^0.1.6"
+    "grunt-responsive-images": "^0.1.6",
+    "gulp-annotate": "^0.2.0",
+    "lodash": "^4.17.5"
   }
 }

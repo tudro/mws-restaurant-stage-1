@@ -58,7 +58,7 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 }
 #footer {
   background-color: #444;
-  color: #aaa;
+  color: #b1b1b1;
   font-size: 8pt;
   letter-spacing: 1px;
   padding: 25px;
@@ -105,7 +105,7 @@ nav h1 a {
 
 /* Add a color to all links inside the list */
 #breadcrumb li a {
-    color: #0275d8;
+    color: #005096;
     text-decoration: none;
     font-size: 1rem;
 }
@@ -125,7 +125,7 @@ nav h1 a {
 .filter-options {
     width: 100%;
     height: auto;
-    background-color: #3397DB;
+    background-color: #207AB6;
     align-items: center;
     display: flex;
     flex-wrap: wrap;
@@ -185,7 +185,7 @@ nav h1 a {
   min-width: 100%;
 }
 #restaurants-list li h2 {
-  color: #f18200;
+  color: #B35F00;
   font-family: Arial,sans-serif;
   font-size: 1.3rem;
   font-weight: 200;
@@ -199,7 +199,7 @@ nav h1 a {
   font-size: 1rem;
 }
 #restaurants-list li a {
-  background-color: orange;
+  background-color: #7d4f00;
   border-bottom: 3px solid #eee;
   color: #fff;
   display: inline-block;
@@ -236,7 +236,7 @@ nav h1 a {
   width: calc(100% - 50px);
 }
 #restaurant-name {
-  color: #f18200;
+  color: #aa5a00;
   font-family: Arial,sans-serif;
   font-size: 20pt;
   font-weight: 200;
@@ -274,7 +274,7 @@ nav h1 a {
   padding: 30px 40px 80px;
 }
 #reviews-container h3 {
-  color: #f58500;
+  color: #aa5a00;
   font-size: 24pt;
   font-weight: 300;
   letter-spacing: -1px;
@@ -331,7 +331,7 @@ nav h1 a {
     position: absolute;
     top: -40px; /* positioned off screen */
     left: 0;
-    background: #aaaaaa;
+    background: #FFFFFF;
     color: white;
     padding: 8px;
     z-index: 1000;
@@ -339,4 +339,58 @@ nav h1 a {
 
 .skip-link:focus {
     top: 0; /* change top on focus */
+    color: #207AB6;
 }
+
+.unbutton {
+    display: inline-block;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    white-space: nowrap;
+}
+
+.toasts {
+    position: fixed;
+    z-index: 3;
+    bottom: 0;
+    left: 0;
+    right: 0; }
+@media (min-width: 640px) {
+    .toasts {
+        bottom: 30px;
+        left: 30px;
+        right: auto; } }
+
+.toast {
+    color: #fff;
+    background: #323232;
+    padding: 14px 24px;
+    padding-right: 0;
+    opacity: 0;
+    display: -webkit-flex;
+    display: flex; }
+@media (min-width: 640px) {
+    .toast {
+        min-width: 288px;
+        max-width: 568px;
+        border-radius: 2px; } }
+.toast .toast-content {
+    margin-right: 48px;
+    -webkit-flex: 1;
+    flex: 1; }
+.toast button {
+    margin: 0;
+    margin-right: 24px;
+    color: #FF4081;
+    text-transform: uppercase;
+    min-width: -webkit-min-content;
+    min-width: -moz-min-content;
+    min-width: min-content;
+    min-height: 5px;
+}
+.toast button:focus {
+    outline: none;
+    color: #fff; }
