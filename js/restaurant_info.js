@@ -79,7 +79,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   image.id = 'restaurant-img';
   image.className = 'restaurant-img';
   image.src = DBHelper.optImageUrlForRestaurant(restaurant);
-  image.alt = restaurant.photoDesc;
+  image.alt = restaurant.name + ' Restaurant Image - ' + restaurant.photoDesc;
   image.tabIndex = 0;
   picture.append(image);
 
