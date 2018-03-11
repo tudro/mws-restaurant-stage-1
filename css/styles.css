@@ -90,6 +90,11 @@ nav h1 a {
     margin: 0;
 }
 
+#breadcrumb li [aria-current="page"] {
+    color: #000 ;
+    font-size: 0.9rem;
+}
+
 /* Display list items side by side */
 #breadcrumb li {
     display: inline;
@@ -114,6 +119,10 @@ nav h1 a {
 #breadcrumb li a:hover {
     color: #01447e;
     text-decoration: underline;
+}
+
+.breadcrumb {
+    text-align: left;
 }
 /* ====================== Map ====================== */
 #map {

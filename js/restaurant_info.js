@@ -175,7 +175,7 @@ createReviewHTML = (review) => {
 fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
-  li.innerHTML = restaurant.name;
+  li.innerHTML = `<a aria-current="page" href="${DBHelper.urlForRestaurant(restaurant)}">` + restaurant.name + '</a>';
   breadcrumb.appendChild(li);
 };
 
