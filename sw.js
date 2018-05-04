@@ -1,4 +1,4 @@
-var staticCacheName = 'mws-rest-v19';
+var staticCacheName = 'mws-rest-v23';
 var contentImgsCache = 'mws-rest-imgs';
 var allCaches = [
   staticCacheName,
@@ -18,6 +18,7 @@ self.addEventListener('install', function(e) {
         '/js/restaurant_info.js',
         '/js/index.js',
         '/js/IndexController.js',
+        '/js/utils/idb.js',
         '/js/utils/closest.js',
         '/js/utils/handlebars-latest.js',
         '/js/utils/matches-selector.js',

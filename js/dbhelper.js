@@ -14,10 +14,31 @@ class DBHelper {
     return `http://localhost:${port}/restaurants`;
   }
 
+  static get IDB() {
+    return idb.open('mws', 1, function(upgradeDb) {
+      switch (upgradeDb.oldVersion) {
+        case 0:
+          const keyValStore = upgradeDb.createObjectStore('restaurants', {
+            keyPath: 'name'
+          }); // name of object store
+      }
+    });
+  }
+
+  static fetchCachedRestaurants(callback) {
+    DBHelper.IDB.then(function(db) {
+      if (!db) return;
+      const restaurants = db.transaction('restaurants').objectStore('restaurants');
+      return restaurants.getAll().then(restaurants => callback(null, restaurants));
+    });
+  }
+
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
+    DBHelper.fetchCachedRestaurants(callback);
+
     fetch(DBHelper.DATABASE_URL)
       .then(response => {
         return response.json();
@@ -30,7 +51,18 @@ class DBHelper {
         }
         return restaurant;
       }))
-      .then(restaurants => callback(null, restaurants))
+      .then(restaurants => {
+        DBHelper.IDB.then(function(db) {
+          if (!db) return;
+
+          const tx = db.transaction('restaurants', 'readwrite');
+          const store = tx.objectStore('restaurants');
+          restaurants.forEach(function(restaurant) {
+            store.put(restaurant);
+          });
+        });
+        callback(null, restaurants);
+      })
       .catch(e => {
         const error = (`Request failed: ${e}`);
         callback(error, null);
