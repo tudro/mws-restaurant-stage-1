@@ -4,10 +4,10 @@ import closest from './../utils/closest.js';
 
 function Toast(text, duration, buttons) {
   var toast = this;
-  var toastTemplate = "<div class=\"toast\">\n" +
-    "  <div class=\"toast-content\">{{text}}</div>\n" +
-    "  {{#each buttons}}<button class=\"unbutton\">{{.}}</button>{{/each}}\n" +
-    "</div>";
+  var toastTemplate = '<div class="toast">\n' +
+    '  <div class="toast-content">{{text}}</div>\n' +
+    '  {{#each buttons}}<button class="unbutton">{{.}}</button>{{/each}}\n' +
+    '</div>';
   var template = Handlebars.compile(toastTemplate);
   this.container = parseHTML(template({
     text: text,

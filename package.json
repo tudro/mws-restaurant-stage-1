@@ -13,14 +13,35 @@
     "grunt-contrib-nodeunit": "~0.4.1",
     "grunt-contrib-uglify": "~0.5.0",
     "grunt-mkdir": "~0.1.2",
+    "gulp-clean-css": "^3.9.4",
+    "gulp-js-minify": "0.0.3",
+    "gulp-order": "^1.1.1",
+    "gulp-uglify-es": "^1.0.1",
+    "gulp-webp": "^3.0.0",
     "idb": "^1.4.0",
-    "simple-transition": "^1.0.0"
+    "simple-transition": "^1.0.0",
+    "webpack-stream": "^4.0.3"
   },
   "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
     "closest": "0.0.1",
     "focus-visible": "^4.1.0",
     "grunt-responsive-images": "^0.1.6",
+    "gulp": "^4.0.0",
     "gulp-annotate": "^0.2.0",
-    "lodash": "^4.17.5"
+    "gulp-babel": "^7.0.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-eslint": "^4.0.2",
+    "gulp-htmlmin": "^4.0.0",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "^3.0.0",
+    "handlebars": "^4.0.11",
+    "imagemin-pngquant": "^5.1.0",
+    "lodash": "^4.17.5",
+    "webpack": "^4.7.0"
   }
 }

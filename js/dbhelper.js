@@ -1,3 +1,5 @@
+// import idb from './utils/idb.js';
+
 /**
  * Common database helper functions.
  */
@@ -25,19 +27,20 @@ class DBHelper {
     });
   }
 
-  static fetchCachedRestaurants(callback) {
-    DBHelper.IDB.then(function(db) {
-      if (!db) return;
-      const restaurants = db.transaction('restaurants').objectStore('restaurants');
-      return restaurants.getAll().then(restaurants => callback(null, restaurants));
-    });
-  }
-
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    DBHelper.fetchCachedRestaurants(callback);
+    DBHelper.IDB.then(function(db) {
+      if (!db) return;
+      const restaurants = db.transaction('restaurants').objectStore('restaurants');
+      return restaurants.getAll().then(restaurants => {
+        if (restaurants.length > 0) {
+          callback(null, restaurants);
+        }
+      });
+    });
+    // DBHelper.fetchCachedRestaurants(callback);
 
     fetch(DBHelper.DATABASE_URL)
       .then(response => {
@@ -45,9 +48,9 @@ class DBHelper {
       })
       .then(restaurants => restaurants.map(restaurant => {
         if ('photograph' in restaurant) {
-          restaurant.photograph += '.jpg';
+          restaurant.photograph += '.webp';
         } else {
-          restaurant.photograph = 'default.jpg';
+          restaurant.photograph = 'default.webp';
         }
         return restaurant;
       }))
@@ -188,7 +191,7 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    return (`/images/${restaurant.photograph}`);
+    return (`./images/${restaurant.photograph}`);
   }
 
   /**
@@ -197,10 +200,10 @@ class DBHelper {
   static optImageUrlForRestaurant(restaurant, x) {
     let imageName = restaurant.photograph;
     if (typeof variable !== 'undefined') {
-      imageName = restaurant.photograph.subsrting(0, restaurant.photograph.indexOf('.jpg')) + '_' + x + '.jpg';
+      imageName = restaurant.photograph.substring(0, restaurant.photograph.indexOf('.webp')) + '_' + x + '.webp';
     }
 
-    return (`/images/${imageName}`);
+    return (`./images/${imageName}`);
   }
 
   /**

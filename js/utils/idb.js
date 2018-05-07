@@ -281,7 +281,7 @@
     };
   });
 
-  var exp = {
+  var idb = {
     open: function(name, version, upgradeCallback) {
       var p = promisifyRequestCall(indexedDB, 'open', [name, version]);
       var request = p.request;
@@ -306,6 +306,6 @@
     module.exports.default = module.exports;
   }
   else {
-    self.idb = exp;
+    self.idb = idb;
   }
 }());

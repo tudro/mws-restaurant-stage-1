@@ -1,9 +1,9 @@
 let restaurants,
   neighborhoods,
   cuisines;
-let map;
+var map;
 markers = [];
-
+var mapLoaded = false;
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
@@ -81,6 +81,7 @@ window.initMap = () => {
     center: loc,
     scrollwheel: false
   });
+  addMarkersToMap();
 };
 
 /**
@@ -95,15 +96,13 @@ updateRestaurants = () => {
 
   const cuisine = cSelect[cIndex].value;
   const neighborhood = nSelect[nIndex].value;
-
   DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
       resetRestaurants(restaurants);
-      fillRestaurantsHTML();
     }
-  })
+  });
 };
 
 /**
@@ -114,11 +113,11 @@ resetRestaurants = (restaurants) => {
   self.restaurants = [];
   const ul = document.getElementById('restaurants-list');
   ul.innerHTML = '';
-
   // Remove all map markers
   self.markers.forEach(m => m.setMap(null));
   self.markers = [];
   self.restaurants = restaurants;
+  fillRestaurantsHTML();
 };
 
 /**
@@ -136,7 +135,10 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
     text.tabIndex = 0;
     ul.append(text);
   }
-  addMarkersToMap();
+  if (!mapLoaded) {
+    loadMap("AIzaSyBrcaMTKZohaMkE_2CkLIHglvfUecjBXDo");
+    mapLoaded = true;
+  }
 };
 
 /**
@@ -188,7 +190,7 @@ createRestaurantHTML = (restaurant) => {
   more.tabIndex = 0;
   li.append(more);
 
-  return li
+  return li;
 };
 
 /**
@@ -199,8 +201,36 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     // Add marker to the map
     const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
     google.maps.event.addListener(marker, 'click', () => {
-      window.location.href = marker.url
+      window.location.href = marker.url;
     });
     self.markers.push(marker);
   });
+};
+
+loadMap = (api_key) => {
+  'use strict';
+
+  if (api_key) {
+    var options = {
+      rootMargin: '400px',
+      threshold: 0
+    };
+
+    var map = document.getElementById('map');
+
+    var observer = new IntersectionObserver(
+      function(entries, observer) {
+        // Detect intersection https://calendar.perfplanet.com/2017/progressive-image-loading-using-intersection-observer-and-sqip/#comment-102838
+        var isIntersecting = typeof entries[0].isIntersecting === 'boolean' ? entries[0].isIntersecting : entries[0].intersectionRatio > 0;
+        if (isIntersecting) {
+          loadJS('https://maps.googleapis.com/maps/api/js?key=' + api_key +
+            '&libraries=places&callback=initMap');
+          observer.unobserve(map);
+        }
+      },
+      options
+    );
+
+    observer.observe(map);
+  }
 };
