@@ -1,5 +1,6 @@
 let restaurant;
 var map;
+var mapLoaded = false;
 
 /**
  * Initialize Google map, called from HTML.
@@ -139,6 +140,11 @@ const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     ul.appendChild(createReviewHTML(review));
   });
   container.appendChild(ul);
+
+  if (!mapLoaded) {
+    loadMap("AIzaSyBrcaMTKZohaMkE_2CkLIHglvfUecjBXDo");
+    mapLoaded = true;
+  }
 };
 
 /**
@@ -193,4 +199,32 @@ const getParameterByName = (name, url) => {
   if (!results[2])
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
+};
+
+const loadMap = (api_key) => {
+  'use strict';
+
+  if (api_key) {
+    var options = {
+      rootMargin: '0px',
+      threshold: 1
+    };
+
+    var map = document.getElementById('map');
+
+    var observer = new IntersectionObserver(
+      function(entries, observer) {
+        // Detect intersection https://calendar.perfplanet.com/2017/progressive-image-loading-using-intersection-observer-and-sqip/#comment-102838
+        var isIntersecting = typeof entries[0].isIntersecting === 'boolean' ? entries[0].isIntersecting : entries[0].intersectionRatio > 0;
+        if (isIntersecting) {
+          loadJS('https://maps.googleapis.com/maps/api/js?key=' + api_key +
+            '&libraries=places&callback=initMap');
+          observer.unobserve(map);
+        }
+      },
+      options
+    );
+
+    observer.observe(map);
+  }
 };

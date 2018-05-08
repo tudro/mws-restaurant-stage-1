@@ -1,18 +1,22 @@
 /* ====================== Restaurant Filtering ====================== */
 .filter-options h2 {
-    width: 100%;
-    margin-top: 10px;
+    width: 100% !important;
+    margin-top: 10px !important;
 }
 
 .filter-options select {
-    width: 100%;
+    width: 100% !important;
 }
 
 #restaurant-info {
-    width: 100%;
+    width: 100% !important;
 }
 
 .inside #map {
-    width: 100%;
+    width: 100% !important;
+}
+
+#reviews-list li {
+    width: 100% !important;
 }
 

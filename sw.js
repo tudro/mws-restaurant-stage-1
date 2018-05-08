@@ -1,4 +1,4 @@
-let staticCacheName = 'mws-rest-v25';
+let staticCacheName = 'mws-rest-v32';
 let contentImgsCache = 'mws-rest-imgs';
 let allCaches = [
   staticCacheName,
@@ -10,8 +10,6 @@ self.addEventListener('install', function(e) {
     caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
         './',
-        './css/styles.css',
-        './css/styles_medium.css',
         './css/styles_small.css',
         './js/dbhelper.js',
         './js/main.js',
@@ -25,10 +23,8 @@ self.addEventListener('install', function(e) {
         './js/utils/parseHTML.js',
         './js/utils/simple-transition.js',
         './js/utils/focus-visible.js',
-        './js/views/Toasts.js',
-        'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700',
-        'https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxK.woff2',
-        'https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmEU9fBBc4.woff2'
+        './js/utils/loadJS.js',
+        './js/views/Toasts.js'
       ]);
     })
   );
@@ -51,7 +47,7 @@ self.addEventListener('activate', function(event) {
 self.addEventListener('fetch', function(event) {
   let requestUrl = new URL(event.request.url);
   if (requestUrl.origin === location.origin) {
-    if (requestUrl.pathname.startsWith('/images/')) {
+    if (requestUrl.pathname.includes('/images/')) {
       event.respondWith(servePhoto(event.request));
       return;
     } else if (requestUrl.pathname.includes('.html')) {
@@ -68,7 +64,7 @@ self.addEventListener('fetch', function(event) {
 });
 
 function servePhoto(request) {
-  var storageUrl = request.url.replace(/_\d+x\.webp$/, '');
+  const storageUrl = request.url.replace(/_\d+x\.webp$/, '');
 
   return caches.open(contentImgsCache).then(function(cache) {
     return cache.match(storageUrl).then(function(response) {
@@ -83,7 +79,6 @@ function servePhoto(request) {
 }
 
 function servePage(request) {
-
   return caches.open(staticCacheName).then(function(cache) {
     return cache.match(request.url).then(function(response) {
       if (response) return response;

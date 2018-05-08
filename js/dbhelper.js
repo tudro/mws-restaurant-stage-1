@@ -1,5 +1,3 @@
-// import idb from './utils/idb.js';
-
 /**
  * Common database helper functions.
  */
@@ -40,7 +38,6 @@ class DBHelper {
         }
       });
     });
-    // DBHelper.fetchCachedRestaurants(callback);
 
     fetch(DBHelper.DATABASE_URL)
       .then(response => {
@@ -199,7 +196,7 @@ class DBHelper {
    */
   static optImageUrlForRestaurant(restaurant, x) {
     let imageName = restaurant.photograph;
-    if (typeof variable !== 'undefined') {
+    if (typeof x !== 'undefined') {
       imageName = restaurant.photograph.substring(0, restaurant.photograph.indexOf('.webp')) + '_' + x + '.webp';
     }
 

@@ -6,8 +6,6 @@
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
-  <!--<link rel="stylesheet" href="css/styles.css">-->
-  <!--<link rel="stylesheet" media="screen and (max-width: 584px) and (min-width: 401px)" href="css/styles_medium.css">-->
   <link rel="stylesheet" media="screen and (max-width: 400px)" href="css/styles_small.css">
   <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
   <link rel="modulepreload" href="js/utils/idb.js">
@@ -16,6 +14,7 @@
   <link rel="modulepreload" href="js/utils/handlebars.min.js">
   <link rel="modulepreload" href="js/utils/focus-visible.js">
   <link rel="modulepreload" href="js/index.js">
+  <link rel="modulepreload" href="js/utils/loadJS.js">
 
   <title>Restaurant Reviews</title>
   <style>
@@ -157,7 +156,6 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      align-items: center;
     }
     .filter-options h2 {
       color: white;
@@ -423,16 +421,16 @@
 
     @media (max-width: 584px) and (min-width: 401px) {
       .filter-options h2 {
-        width: 100%;
-        margin-top: 10px;
+        width: 100% !important;
+        margin-top: 10px !important;
       }
 
       .filter-options select {
-        width: calc(50% - 20px);
+        width: calc(50% - 20px) !important;
       }
 
       #reviews-list li {
-        width: 100%;
+        width: 100% !important;
       }
     }
   </style>
@@ -463,7 +461,6 @@
     </section>
   </main>
 
-  <!--<script src="js/all.js"></script>-->
   <script type="application/javascript" charset="utf-8" src="js/utils/idb.js"></script>
   <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
   <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
@@ -472,9 +469,6 @@
   <script type="application/javascript" charset="utf-8" src="js/utils/loadJS.js"></script>
   <script type="module" charset="utf-8" src="js/index.js"></script>
   <script src="js/utils/loadJS.js"></script>
-
-  <!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrcaMTKZohaMkE_2CkLIHglvfUecjBXDo&libraries=places&callback=initMap"></script>-->
-
 
   <footer id="footer">
     Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
