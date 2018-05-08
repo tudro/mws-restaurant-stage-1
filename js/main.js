@@ -11,23 +11,34 @@ var mapLoaded = false;
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
-  fetchNeighborhoods();
-  fetchCuisines();
-  updateRestaurants();
+  DBHelper.fetchRestaurants((error, restaurants) => {
+    if (error) {
+      console.error(error);
+    } else {
+      fetchNeighborhoods(restaurants);
+      fetchCuisines(restaurants);
+      updateRestaurants(restaurants);
+    }
+  });
 });
 
 /**
  * Fetch all neighborhoods and set their HTML.
  */
-const fetchNeighborhoods = () => {
-  DBHelper.fetchNeighborhoods((error, neighborhoods) => {
+const fetchNeighborhoods = (restaurants = null) => {
+  const callback = (error, neighborhoods) => {
     if (error) { // Got an error
       console.error(error);
     } else {
       self.neighborhoods = neighborhoods;
       fillNeighborhoodsHTML();
     }
-  });
+  };
+  if (restaurants === null) {
+    DBHelper.fetchNeighborhoods(callback);
+  } else {
+    DBHelper.processNeightborhoods(restaurants, callback);
+  }
 };
 
 /**
@@ -46,15 +57,20 @@ const fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
 /**
  * Fetch all cuisines and set their HTML.
  */
-const fetchCuisines = () => {
-  DBHelper.fetchCuisines((error, cuisines) => {
+const fetchCuisines = (restaurants = null) => {
+  const callback = (error, cuisines) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
       self.cuisines = cuisines;
       fillCuisinesHTML();
     }
-  });
+  };
+  if (restaurants === null) {
+    DBHelper.fetchCuisines(callback);
+  } else {
+    DBHelper.processCuisines(restaurants, callback);
+  }
 };
 
 /**
@@ -91,7 +107,7 @@ window.initMap = () => {
 /**
  * Update page and map for current restaurants.
  */
-const updateRestaurants = () => {
+const updateRestaurants = (restaurants = null) => {
   const cSelect = document.getElementById('cuisines-select');
   const nSelect = document.getElementById('neighborhoods-select');
 
@@ -100,13 +116,20 @@ const updateRestaurants = () => {
 
   const cuisine = cSelect[cIndex].value;
   const neighborhood = nSelect[nIndex].value;
-  DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
+
+  const callback = (error, restaurants) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
       resetRestaurants(restaurants);
     }
-  });
+  };
+
+  if (restaurants === null) {
+    DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, callback);
+  } else {
+    DBHelper.processRestaurantByCuisineAndNeighborhood(restaurants, cuisine, neighborhood, callback);
+  }
 };
 
 /**
