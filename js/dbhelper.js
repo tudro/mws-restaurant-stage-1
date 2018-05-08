@@ -1,7 +1,9 @@
+import idb from './utils/idb.js';
+
 /**
  * Common database helper functions.
  */
-class DBHelper {
+export default class DBHelper {
 
   /**
    * Database URL.

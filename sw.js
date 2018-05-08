@@ -1,4 +1,4 @@
-let staticCacheName = 'mws-rest-v32';
+let staticCacheName = 'mws-rest-v33';
 let contentImgsCache = 'mws-rest-imgs';
 let allCaches = [
   staticCacheName,
@@ -10,21 +10,9 @@ self.addEventListener('install', function(e) {
     caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
         './',
-        './css/styles_small.css',
-        './js/dbhelper.js',
-        './js/main.js',
-        './js/restaurant_info.js',
-        './js/index.js',
-        './js/IndexController.js',
-        './js/utils/idb.js',
-        './js/utils/closest.js',
-        './js/utils/handlebars.min.js',
-        './js/utils/matches-selector.js',
-        './js/utils/parseHTML.js',
-        './js/utils/simple-transition.js',
-        './js/utils/focus-visible.js',
-        './js/utils/loadJS.js',
-        './js/views/Toasts.js'
+        './js/indexBundle.js',
+        './js/restaurantBundle.js',
+        './css/styles_small.css'
       ]);
     })
   );

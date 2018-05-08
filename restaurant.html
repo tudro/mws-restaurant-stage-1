@@ -5,16 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="manifest.json">
-  <!-- Normalize.css for better cross-browser consistency -->
-  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <!-- Main CSS file -->
   <link rel="stylesheet" media="screen and (max-width: 820px)" href="css/styles_small.css">
   <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
-  <link rel="modulepreload" href="js/utils/idb.js">
-  <link rel="modulepreload" href="js/dbhelper.js">
-  <link rel="modulepreload" href="js/restaurant_info.js">
-  <link rel="modulepreload" href="js/utils/focus-visible.js">
-  <link rel="modulepreload" href="js/utils/loadJS.js">
+  <link rel="modulepreload" href="js/restaurantBundle.js">
 
   <title>Restaurant Info</title>
   <style>
@@ -490,12 +484,8 @@
 
   <!-- Beginning scripts -->
   <!-- Database helpers -->
-  <script type="application/javascript" charset="utf-8" src="js/utils/idb.js"></script>
-  <script type="text/javascript" src="js/dbhelper.js"></script>
-  <!-- Main javascript file -->
-  <script type="text/javascript" src="js/restaurant_info.js"></script>
-  <script type="application/javascript" charset="utf-8" src="js/utils/focus-visible.js"></script>
-  <script src="js/utils/loadJS.js"></script>
+
+  <script src="js/restaurantBundle.js"></script>
   <!-- End scripts -->
 
 </body>

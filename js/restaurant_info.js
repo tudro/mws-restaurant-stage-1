@@ -1,3 +1,6 @@
+import DBHelper from './dbhelper.js';
+import loadJS from './utils/loadJS.js';
+
 let restaurant;
 var map;
 var mapLoaded = false;
