@@ -46,7 +46,7 @@ const fetchRestaurantFromURL = (callback) => {
         return;
       }
       fillRestaurantHTML();
-      callback(null, restaurant)
+      callback(null, restaurant);
     });
   }
 };
@@ -101,6 +101,7 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
  */
 const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
   const hours = document.getElementById('restaurant-hours');
+  hours.innerHTML = '';
   for (let key in operatingHours) {
     const row = document.createElement('tr');
 
@@ -123,6 +124,7 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
  */
 const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
+  container.innerHTML = '';
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
   title.tabIndex = 0;
@@ -135,7 +137,8 @@ const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     container.appendChild(noReviews);
     return;
   }
-  const ul = document.getElementById('reviews-list');
+  const ul = document.createElement('ul');
+  ul.setAttribute('id', 'reviews-list');
   reviews.forEach(review => {
     ul.appendChild(createReviewHTML(review));
   });
@@ -180,6 +183,10 @@ const createReviewHTML = (review) => {
  */
 const fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
+  breadcrumb.innerHTML = '';
+  const homeLi = document.createElement('li');
+  homeLi.innerHTML = '<a href="/">Home</a>';
+  breadcrumb.appendChild(homeLi);
   const li = document.createElement('li');
   li.innerHTML = `<a aria-current="page" href="${DBHelper.urlForRestaurant(restaurant)}">` + restaurant.name + '</a>';
   breadcrumb.appendChild(li);
