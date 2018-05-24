@@ -1,5 +1,6 @@
 import DBHelper from './dbhelper.js';
 import loadJS from './utils/loadJS.js';
+import HTMLUtils from './utils/html-utils.js';
 
 let restaurants,
   neighborhoods,
@@ -176,6 +177,8 @@ const fillRestaurantsHTML = (restaurants = self.restaurants) => {
 const createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
 
+  const pictureBadgeContainer = document.createElement('div');
+  pictureBadgeContainer.className = 'picture-badge-container';
 
   const picture = document.createElement('picture');
 
@@ -196,7 +199,12 @@ const createRestaurantHTML = (restaurant) => {
   image.tabIndex = 0;
   picture.append(image);
 
-  li.append(picture);
+  pictureBadgeContainer.append(picture);
+
+  const badge = document.createElement('span');
+  pictureBadgeContainer.append(HTMLUtils.generateBadge(badge, restaurant));
+
+  li.append(pictureBadgeContainer);
 
   const name = document.createElement('h2');
   name.innerHTML = restaurant.name;

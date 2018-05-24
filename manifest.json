@@ -3,7 +3,7 @@
   "name": "MWS Restaurant",
   "scope": "/",
   "icons": [{
-    "src": "/img/icon.png",
+    "src": "/imgages/icon.webp",
     "sizes": "512x512",
     "type": "image/png"
   }],

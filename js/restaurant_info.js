@@ -1,9 +1,12 @@
 import DBHelper from './dbhelper.js';
 import loadJS from './utils/loadJS.js';
+import HTMLUtils from './utils/html-utils.js';
+import moment from './utils/moment.min.js';
 
 let restaurant;
 var map;
 var mapLoaded = false;
+const timestampFormat = 'YYYY-MM-DD';
 
 /**
  * Initialize Google map, called from HTML.
@@ -66,6 +69,8 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
   address.innerHTML = restaurant.address;
   address.tabIndex = 0;
 
+  const pictureBadgeContainer = document.getElementsByClassName('picture-badge-container').item(0);
+
   const picture = document.getElementById('restaurant-picture');
   picture.innerHTML = '';
 
@@ -87,6 +92,11 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
   image.tabIndex = 0;
   picture.append(image);
 
+  pictureBadgeContainer.append(picture);
+
+  const badge = document.getElementsByClassName('badge').item(0);
+  pictureBadgeContainer.append(HTMLUtils.generateBadge(badge, restaurant));
+
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
   cuisine.tabIndex = 0;
@@ -96,7 +106,13 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
     fillRestaurantHoursHTML();
   }
   // fill reviews
-  fillReviewsHTML();
+  DBHelper.fetchReviewsById(restaurant.id, (error, reviews) => {
+    if (!reviews) {
+      console.error(error);
+      return;
+    }
+    fillReviewsHTML(reviews);
+  });
 };
 
 /**
@@ -114,7 +130,7 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
     row.appendChild(day);
 
     const time = document.createElement('td');
-    time.innerHTML = operatingHours[key];
+    time.innerHTML = operatingHours[key].replace(',', '<br />');
     time.tabIndex = 0;
     row.appendChild(time);
 
@@ -146,7 +162,6 @@ const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     ul.appendChild(createReviewHTML(review));
   });
   container.appendChild(ul);
-
   if (!mapLoaded) {
     loadMap("AIzaSyBrcaMTKZohaMkE_2CkLIHglvfUecjBXDo");
     mapLoaded = true;
@@ -164,7 +179,7 @@ const createReviewHTML = (review) => {
   li.appendChild(name);
 
   const date = document.createElement('p');
-  date.innerHTML = review.date;
+  date.innerHTML = moment(review.updatedAt).format(timestampFormat);
   date.tabIndex = 0;
   li.appendChild(date);
 
@@ -213,7 +228,6 @@ const getParameterByName = (name, url) => {
 
 const loadMap = (api_key) => {
   'use strict';
-
   if (api_key) {
     var options = {
       rootMargin: '0px',

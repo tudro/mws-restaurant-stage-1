@@ -137,7 +137,7 @@
     }
     /* ====================== Map ====================== */
     #map {
-      height: 400px;
+      height: 200px;
       width: 100%;
       background-color: #ccc;
     }
@@ -150,7 +150,6 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      align-items: center;
     }
     .filter-options h2 {
       color: white;
@@ -247,7 +246,6 @@
     }
     .inside #map {
       background-color: #ccc;
-      width: 66%;
     }
     .inside #footer {
       bottom: 0;
@@ -269,7 +267,8 @@
     }
     #restaurant-address {
       font-size: 12pt;
-      margin: 10px 0px;
+      margin: 0;
+      text-align: center;
     }
     #restaurant-cuisine {
       background-color: #333;
@@ -319,19 +318,13 @@
     #reviews-list li p {
       margin: 0 0 10px;
     }
+
+    #restaurant-hours {
+      margin: auto;
+    }
+
     #restaurant-hours td {
       color: #666;
-    }
-
-    #info-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #restaurant-info {
-      width: 33%;
     }
 
     @media screen and (max-width: 580px) {
@@ -428,6 +421,71 @@
         width: 100% !important;
       }
     }
+
+    #restaurant-info-container {
+      display: grid;
+      grid-column-gap: 20px;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+              "restaurant-image restaurant-hours"
+              "restaurant-image restaurant-map";
+    }
+
+    @media (max-width: 1200px)  {
+      #restaurant-info-container {
+        grid-template-areas:
+                "restaurant-image restaurant-hours"
+                "restaurant-map restaurant-map";
+      }
+
+      #restaurant-info {
+        margin: auto;
+      }
+    }
+
+    @media (max-width: 650px)  {
+      #restaurant-info-container {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+                "restaurant-image"
+                "restaurant-hours"
+                "restaurant-map";
+      }
+    }
+
+    #restaurant-first-info {
+      grid-area: restaurant-image;
+    }
+
+    #restaurant-info {
+      grid-area: restaurant-hours;
+    }
+
+    #info-container {
+      grid-area: restaurant-map;
+    }
+
+    div span.badge {
+      position: absolute;
+
+      top: -10px;
+      right: -10px;
+      font-size: 12px;
+      background:url(images/star-icon-grey.webp) left top;
+      width: 32px;
+      height: 32px;
+      display: block;
+    }
+
+    div span.badge-active {
+      background:url(images/star-icon.webp) left top;
+    }
+
+    .picture-badge-container {
+      position: relative;
+    }
+
+
   </style>
 </head>
 
@@ -455,19 +513,27 @@
     <!-- Beginning restaurant -->
     <section id="restaurant-container">
       <h2 id="restaurant-name"></h2>
-      <picture id="restaurant-picture"></picture>
-      <p id="restaurant-cuisine"></p>
-      <div id="info-container">
+      <div id="restaurant-info-container">
+        <div id="restaurant-first-info">
+          <div class="picture-badge-container">
+            <picture id="restaurant-picture"></picture>
+            <span class="badge"></span>
+          </div>
+          <p id="restaurant-cuisine"></p>
+        </div>
         <div id="restaurant-info">
           <p id="restaurant-address"></p>
           <table id="restaurant-hours"></table>
         </div>
-        <div id="map" role="application"></div>
+        <div id="info-container">
+          <!-- Beginning map -->
+          <div id="map" role="application"></div>
+          <!-- End map -->
+        </div>
       </div>
     </section>
     <!-- end restaurant -->
-    <!-- Beginning map -->
-    <!-- End map -->
+
     <!-- Beginning reviews -->
     <section id="reviews-container">
       <ul id="reviews-list"></ul>
