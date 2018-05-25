@@ -2,6 +2,7 @@ import DBHelper from './dbhelper.js';
 import loadJS from './utils/loadJS.js';
 import HTMLUtils from './utils/html-utils.js';
 import moment from './utils/moment.min.js';
+import serialize from './utils/form-serialize.js';
 
 let restaurant;
 var map;
@@ -111,6 +112,19 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
       console.error(error);
       return;
     }
+
+    const sum = reviews.reduce(function(acc, val) {
+      acc.rating = parseInt(acc.rating) + parseInt(val.rating);
+      return acc;
+    });
+
+    const ratingAverage = document.getElementById('restaurant-rating');
+    ratingAverage.innerHTML = '';
+    const ratingValue = Math.round(sum.rating / reviews.length);
+    ratingAverage.appendChild(HTMLUtils.generateRatingStars(ratingValue));
+    ratingAverage.setAttribute('aria-label', `Average rating is ${ratingValue} out of 5`);
+    ratingAverage.tabIndex = 0;
+
     fillReviewsHTML(reviews);
   });
 };
@@ -142,30 +156,176 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
  * Create all reviews HTML and add them to the webpage.
  */
 const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
-  const container = document.getElementById('reviews-container');
-  container.innerHTML = '';
-  const title = document.createElement('h3');
-  title.innerHTML = 'Reviews';
-  title.tabIndex = 0;
-  container.appendChild(title);
+  DBHelper.fetchMyReviewsByResturantId(getParameterByName('id'), (error, myReviews) => {
+    const container = document.getElementById('reviews-container');
+    container.innerHTML = '';
+    const title = document.createElement('h3');
+    title.innerHTML = 'Reviews';
+    title.tabIndex = 0;
+    container.appendChild(title);
 
-  if (!reviews) {
-    const noReviews = document.createElement('p');
-    noReviews.innerHTML = 'No reviews yet!';
-    noReviews.tabIndex = 0;
-    container.appendChild(noReviews);
-    return;
-  }
-  const ul = document.createElement('ul');
-  ul.setAttribute('id', 'reviews-list');
-  reviews.forEach(review => {
-    ul.appendChild(createReviewHTML(review));
+    if (!reviews) {
+      const noReviews = document.createElement('p');
+      noReviews.innerHTML = 'No reviews yet!';
+      noReviews.tabIndex = 0;
+      container.appendChild(noReviews);
+      return;
+    }
+    const ul = document.createElement('ul');
+    ul.setAttribute('id', 'reviews-list');
+
+    let myReview = {};
+    if (myReviews.length > 0) {
+      myReview = myReviews[0];
+    }
+
+    reviews = reviews.filter(r => r.id !== myReview.review_id);
+
+    ul.appendChild(createMyReviewHTML(myReview));
+    reviews.forEach(review => {
+      ul.appendChild(createReviewHTML(review));
+    });
+    container.appendChild(ul);
   });
-  container.appendChild(ul);
+
   if (!mapLoaded) {
     loadMap("AIzaSyBrcaMTKZohaMkE_2CkLIHglvfUecjBXDo");
     mapLoaded = true;
   }
+};
+
+/**
+ * Create review HTML form
+ */
+const createMyReviewHTML = (myReview) => {
+  const li = document.createElement('li');
+
+  const formDiv = document.createElement('div');
+  formDiv.className = 'mws-form';
+
+  const reviewForm = document.createElement('form');
+  reviewForm.setAttribute('action', '#');
+  reviewForm.setAttribute('id', 'review-form');
+
+  const legend = document.createElement('legend');
+  legend.innerText = 'Your review';
+  reviewForm.appendChild(legend);
+
+  const restaurantIdInput = document.createElement('input');
+  restaurantIdInput.setAttribute('type', 'hidden');
+  restaurantIdInput.setAttribute('name', 'restaurant_id');
+  restaurantIdInput.value = getParameterByName('id');
+  reviewForm.appendChild(restaurantIdInput);
+
+  const reviewIdInput = document.createElement('input');
+  reviewIdInput.setAttribute('type', 'hidden');
+  reviewIdInput.setAttribute('name', 'review_id');
+  reviewIdInput.setAttribute('id', 'review_id');
+  reviewIdInput.value = 'review_id' in myReview ? myReview.review_id : '0';
+  reviewForm.appendChild(reviewIdInput);
+
+  const nameInput = document.createElement('input');
+  nameInput.setAttribute('type', 'text');
+  nameInput.setAttribute('name', 'name');
+  nameInput.setAttribute('aria-label', 'Your name (required)');
+  nameInput.setAttribute('placeholder', '* Your name');
+  if ('name' in myReview) {
+    nameInput.value = myReview.name;
+  }
+  reviewForm.appendChild(nameInput);
+
+  const rating = document.createElement('div');
+  rating.className = 'rating';
+
+  const ratingLabel = document.createElement('legend');
+  ratingLabel.innerText = 'Please rate: ';
+  rating.appendChild(ratingLabel);
+
+  let ratingStars = 5;
+  if ('rating' in myReview) {
+    ratingStars = myReview.rating;
+  }
+  for (let i=5; i>=1; i--) {
+    const starInput = document.createElement('input');
+    starInput.setAttribute('type', 'radio');
+    starInput.setAttribute('name', 'rating');
+    starInput.setAttribute('id', `star${i}`);
+    starInput.value = i;
+
+    if (i === ratingStars) {
+      starInput.setAttribute('checked', 'checked');
+    }
+    rating.appendChild(starInput);
+
+    const starLabel = document.createElement('label');
+    starLabel.setAttribute('for', `star${i}`);
+    starLabel.innerText = i === 1 ? '1 star' : `${i} stars`;
+    rating.appendChild(starLabel);
+  }
+  reviewForm.appendChild(rating);
+
+  const comment = document.createElement('textarea');
+  comment.setAttribute('name', 'comments');
+  comment.setAttribute('placeholder', 'Your comment');
+  if ('comments' in myReview) {
+    comment.value = myReview.comments;
+  }
+  comment.setAttribute('aria-label', 'Your comment');
+  reviewForm.appendChild(comment);
+
+  const buttonsContainer = document.createElement('div');
+
+  const submitButton = document.createElement('input');
+  submitButton.setAttribute('type', 'submit');
+  submitButton.value = 'Save';
+  submitButton.onclick = (e) => {
+    e.preventDefault();
+    DBHelper.saveReview(serialize(document.getElementById('review-form'), { hash: true }), (error, response) => {
+      if (error) {
+        document.getElementById('review-info-label').innerText = error;
+      } else {
+        document.getElementById('review_id').value = response;
+        document.getElementById('review-info-label').innerText = 'Saved';
+        setTimeout(() => fillRestaurantHTML(self.restaurant), 1000);
+      }
+    });
+  };
+  buttonsContainer.appendChild(submitButton);
+  buttonsContainer.className = 'buttons-container';
+
+  if ('name' in myReview) {
+    submitButton.classList.add('save-reduced');
+
+    const deleteButton = document.createElement('input');
+    deleteButton.setAttribute('type', 'submit');
+    deleteButton.value = 'Delete';
+    deleteButton.onclick = (e) => {
+      e.preventDefault();
+      DBHelper.deleteReview(serialize(document.getElementById('review-form'), { hash: true }), (error, response) => {
+        if (error) {
+          document.getElementById('review-info-label').innerText = error;
+        } else {
+          document.getElementById('review-info-label').innerText = response;
+          document.getElementById('review-form').reset();
+          setTimeout(() => fillRestaurantHTML(self.restaurant), 1000);
+        }
+      });
+    };
+    deleteButton.classList.add('delete-reduced');
+    buttonsContainer.appendChild(deleteButton);
+  }
+
+  reviewForm.appendChild(buttonsContainer);
+
+  const infoLabel = document.createElement('label');
+  infoLabel.setAttribute('id', 'review-info-label');
+  infoLabel.innerText = '';
+  reviewForm.appendChild(infoLabel);
+
+  formDiv.appendChild(reviewForm);
+  li.appendChild(formDiv);
+
+  return li;
 };
 
 /**
@@ -183,16 +343,13 @@ const createReviewHTML = (review) => {
   date.tabIndex = 0;
   li.appendChild(date);
 
-  const rating = document.createElement('p');
-  rating.innerHTML = `Rating: ${review.rating}`;
-  rating.tabIndex = 0;
+  const rating = HTMLUtils.generateRatingStars(review.rating);
   li.appendChild(rating);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
   comments.tabIndex = 0;
   li.appendChild(comments);
-
   return li;
 };
 

@@ -66,11 +66,12 @@ gulp.task('copy-images', function (done) {
 });
 
 gulp.task('scripts', function(done) {
-	const baseFiles = ['js/dbhelper.js', 'js/utils/focus-visible.js', 'js/utils/idb.js', 'js/utils/loadJs.js'];
+	const baseFiles = ['js/dbhelper.js', 'js/utils/focus-visible.js', 'js/utils/idb.js', 'js/utils/loadJs.js',
+		'js/utils/html-utils.js'];
 	const indexFiles = baseFiles.concat(['js/main.js', 'js/index.js', 'js/IndexController.js',
 		'js/utils/closest.js', 'js/utils/handlebars.min.js', 'js/utils/matches-selector.js',
-		'js/utils/parseHTML.js', 'js/utils/simple-transition.js']);
-	const restaurantFiles = baseFiles.concat(['js/restaurant_info.js']);
+		'js/utils/parseHTML.js', 'js/utils/simple-transition.js', 'js/utils/lazy-load.js']);
+	const restaurantFiles = baseFiles.concat(['js/restaurant_info.js', 'js/utils/form-serialize.js']);
 
 	const files = {indexBundle: indexFiles, restaurantBundle: restaurantFiles};
   for (let bundleName in files) {
@@ -93,12 +94,12 @@ gulp.task('dist', gulp.parallel('copy-html', 'copy-files', 'copy-sw', 'copy-imag
 
 gulp.task('default', gulp.parallel('minify-css', 'copy-html', 'copy-images', 'copy-files', 'copy-sw', 'scripts', function() {
 	gulp.watch('css/**/*.css', gulp.series('minify-css'));
-	gulp.watch('js/**/*.js', gulp.series('copy-js'));
+	gulp.watch('js/**/*.js', gulp.series('scripts'));
 	gulp.watch('*.html', gulp.series('copy-html'));
   gulp.watch(['favicon.ico', 'manifest.json'], gulp.series('copy-files'));
   gulp.watch('sw.js', gulp.series('copy-sw'));
 
-	gulp.watch('./dist/index.html').on('change', browserSync.reload);
+	gulp.watch('./dist/*.*').on('change', browserSync.reload);
 
 	browserSync.init({
 		server: './dist',

@@ -50,4 +50,23 @@ export default class HTMLUtils {
 
     return badge;
   }
+
+  /**
+   * Generate rating stars
+   */
+  static generateRatingStars(value) {
+    const rating = document.createElement('p');
+    for (let i=1; i<=5; i++) {
+      const star = document.createElement('span');
+      star.classList.add('fa');
+      star.classList.add('fa-star');
+      if (i <= value) {
+        star.classList.add(['checked']);
+      }
+      rating.appendChild(star);
+    }
+    rating.setAttribute('aria-label', `Rating: ${value} out of 5.`);
+    rating.tabIndex = 0;
+    return rating;
+  }
 }

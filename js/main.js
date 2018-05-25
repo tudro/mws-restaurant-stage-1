@@ -1,6 +1,7 @@
 import DBHelper from './dbhelper.js';
 import loadJS from './utils/loadJS.js';
 import HTMLUtils from './utils/html-utils.js';
+import preloadImages from './utils/lazy-load.js';
 
 let restaurants,
   neighborhoods,
@@ -168,6 +169,7 @@ const fillRestaurantsHTML = (restaurants = self.restaurants) => {
   if (!mapLoaded) {
     loadMap("AIzaSyBrcaMTKZohaMkE_2CkLIHglvfUecjBXDo");
     mapLoaded = true;
+    preloadImages();
   }
 };
 
@@ -181,20 +183,10 @@ const createRestaurantHTML = (restaurant) => {
   pictureBadgeContainer.className = 'picture-badge-container';
 
   const picture = document.createElement('picture');
-
-  const sourceSmall = document.createElement('source');
-  sourceSmall.media = '(max-width: 400px)';
-  sourceSmall.srcset = DBHelper.optImageUrlForRestaurant(restaurant);
-  picture.append(sourceSmall);
-
-  const sourceFull = document.createElement('source');
-  sourceFull.media = '(max-width: 800px)';
-  sourceFull.srcset = DBHelper.optImageUrlForRestaurant(restaurant, '2x');
-  picture.append(sourceFull);
-
   const image = document.createElement('img');
   image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.classList.add('js-lazy-image');
+  image.setAttribute('data-src', DBHelper.imageUrlForRestaurant(restaurant));
   image.alt = restaurant.name + ' Restaurant Image - ' + restaurant.photoDesc;
   image.tabIndex = 0;
   picture.append(image);

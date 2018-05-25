@@ -7,6 +7,7 @@
   <link rel="manifest" href="manifest.json">
   <!-- Main CSS file -->
   <link rel="stylesheet" media="screen and (max-width: 820px)" href="css/styles_small.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
   <link rel="modulepreload" href="js/restaurantBundle.js">
 
@@ -137,7 +138,7 @@
     }
     /* ====================== Map ====================== */
     #map {
-      height: 200px;
+      height: 230px;
       width: 100%;
       background-color: #ccc;
     }
@@ -276,7 +277,7 @@
       font-size: 12pt;
       font-weight: 300;
       letter-spacing: 10px;
-      margin: 0 0 20px;
+      margin: 0;
       padding: 2px 0;
       text-align: center;
       text-transform: uppercase;
@@ -453,6 +454,12 @@
       }
     }
 
+    @media (max-width: 440px)  {
+      .mws-form legend {
+        display: none;
+      }
+    }
+
     #restaurant-first-info {
       grid-area: restaurant-image;
     }
@@ -483,6 +490,199 @@
 
     .picture-badge-container {
       position: relative;
+    }
+
+
+    .rating {
+        float:left;
+    }
+
+    .rating:not(:checked) > input {
+        position:absolute;
+        clip:rect(0,0,0,0);
+    }
+
+    .rating:not(:checked) > label {
+        float:right;
+        width:1em;
+        padding:0 .1em;
+        overflow:hidden;
+        white-space:nowrap;
+        cursor:pointer;
+        font-size:200%;
+        line-height:1.2;
+        color:#ddd;
+        text-shadow:1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);
+    }
+
+    .rating:not(:checked) > label:before {
+        content: '★ ';
+    }
+
+    .rating > input:checked ~ label {
+        color: #f70;
+        text-shadow:1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0,0,0,.5);
+    }
+
+    .rating:not(:checked) > label:hover,
+    .rating:not(:checked) > label:hover ~ label {
+        color: gold;
+        text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+    }
+
+    .rating > input:checked + label:hover,
+    .rating > input:checked + label:hover ~ label,
+    .rating > input:checked ~ label:hover,
+    .rating > input:checked ~ label:hover ~ label,
+    .rating > label:hover ~ input:checked ~ label {
+        color: #ea0;
+        text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+    }
+
+    .rating > label:active {
+        position:relative;
+        top:2px;
+        left:2px;
+    }
+
+    .mws-form {
+        max-width: 500px;
+        padding: 10px 20px;
+        background: #f4f7f8;
+        margin: 10px auto;
+        padding: 20px;
+        background: #f4f7f8;
+        border-radius: 8px;
+        font-family: Georgia, "Times New Roman", Times, serif;
+    }
+    .mws-form legend {
+        font-size: 1.4em;
+        margin-bottom: 10px;
+        float: left;
+    }
+    .mws-form label {
+        display: block;
+        margin-bottom: 8px;
+        text-align: center;
+        font-size: 16px;
+        color: #207AB6;
+    }
+    .mws-form input[type="text"],
+    .mws-form textarea {
+        font-family: Georgia, "Times New Roman", Times, serif;
+        background: rgba(255,255,255,.1);
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        margin: 0;
+        outline: 0;
+        padding: 7px;
+        width: 100%;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        background-color: #e8eeef;
+      color: #000000;
+        -webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+        box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+        margin-bottom: 30px;
+
+    }
+
+    .mws-form ::placeholder {
+      color: black;
+      opacity: 1; /* Firefox */
+    }
+
+    .mws-form textarea {
+        margin-top: 20px;
+        max-width: 100%;
+    }
+
+    .mws-form input[type="text"]:focus,
+    .mws-form textarea:focus {
+        background: #d2d9dd;
+    }
+
+    .mws-form input[type="submit"],
+    .mws-form input[type="button"]
+    {
+        position: relative;
+        display: block;
+        padding: 19px 39px 18px 39px;
+        color: #FFF;
+        margin: 0 auto;
+        background: #1abc9c;
+        font-size: 18px;
+        text-align: center;
+        font-style: normal;
+        width: 100%;
+        border: 1px solid #16a085;
+        border-width: 1px 1px 3px;
+        margin-bottom: 10px;
+    }
+
+    .mws-form input.save-reduced[type="submit"]
+    {
+      width: 40%;
+      float: left;
+    }
+
+    .mws-form input.delete-reduced[type="submit"]
+    {
+      width: 40%;
+      float: right;
+      background: #bc2d09;
+      border: 1px solid #bc2d09;
+    }
+
+    .mws-form input.delete-reduced[type="submit"]:hover
+    {
+      background: #831f06;
+    }
+
+    .mws-form input[type="submit"]:hover,
+    .mws-form input[type="button"]:hover
+    {
+        background: #109177;
+    }
+
+    .checked {
+        color: orange;
+    }
+
+    .buttons-container {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    #restaurant-rating {
+      background-color: #dadada;
+      color: #ddd;
+      font-size: 12pt;
+      font-weight: 300;
+      letter-spacing: 10px;
+      text-align: center;
+      text-transform: uppercase;
+      width: 100%;
+    }
+
+    .star-div {
+      display: block;
+    }
+
+    @media (max-width: 480px)  {
+      .mws-form input.save-reduced[type="submit"]
+      {
+        width: 100%;
+        float: none;
+      }
+
+      .mws-form input.delete-reduced[type="submit"]
+      {
+        width: 100%;
+        float: none;
+      }
     }
 
 
@@ -520,6 +720,7 @@
             <span class="badge"></span>
           </div>
           <p id="restaurant-cuisine"></p>
+          <div id="restaurant-rating"></div>
         </div>
         <div id="restaurant-info">
           <p id="restaurant-address"></p>
