@@ -1,3 +1,6 @@
+# Usage
+Start project by running `gulp` in the project root.
+
 # Mobile Web Specialist Certification Course
 ---
 #### _Three Stage Course Material Project - Restaurant Reviews_
