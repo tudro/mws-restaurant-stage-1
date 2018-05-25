@@ -69,7 +69,7 @@ gulp.task('scripts', function(done) {
 	const baseFiles = ['js/dbhelper.js', 'js/utils/focus-visible.js', 'js/utils/idb.js', 'js/utils/loadJs.js',
 		'js/utils/html-utils.js'];
 	const indexFiles = baseFiles.concat(['js/main.js', 'js/index.js', 'js/IndexController.js',
-		'js/utils/closest.js', 'js/utils/handlebars.min.js', 'js/utils/matches-selector.js',
+		'js/utils/closest.js', 'js/utils/handlebars-v4.0.11.js', 'js/utils/matches-selector.js',
 		'js/utils/parseHTML.js', 'js/utils/simple-transition.js', 'js/utils/lazy-load.js']);
 	const restaurantFiles = baseFiles.concat(['js/restaurant_info.js', 'js/utils/form-serialize.js']);
 

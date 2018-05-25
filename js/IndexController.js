@@ -3,6 +3,7 @@ import ToastsView from './views/Toasts.js';
 export default function IndexController(container) {
   this._container = container;
   this._toastsView = new ToastsView(this._container);
+  this._refreshing = null;
   this._registerServiceWorker();
 }
 
@@ -14,6 +15,7 @@ IndexController.prototype._registerServiceWorker = function() {
     }
     console.log("Service Worker Registered");
     if (reg.waiting) {
+      indexController._refreshing = false;
       indexController._updateReady(reg.waiting);
     }
 
@@ -26,12 +28,13 @@ IndexController.prototype._registerServiceWorker = function() {
       indexController._trackInstalling(reg.installing);
     });
 
-    var refreshing;
-    navigator.serviceWorker.addEventListener('controllerchange', function () {
-      if (refreshing) return;
-      window.location.reload();
-      refreshing = true;
-    })
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (indexController._refreshing) return;
+      else if (indexController._refreshing !== null) {
+        window.location.reload();
+        indexController._refreshing = true;
+      }
+    });
   });
 };
 
@@ -46,12 +49,14 @@ IndexController.prototype._trackInstalling = function(worker) {
 };
 
 IndexController.prototype._updateReady = function(worker) {
-  var toast = this._toastsView.show("New version available", {
-    buttons: ['refresh', 'dismiss']
-  });
+  if (this._refreshing !== null) {
+    var toast = this._toastsView.show("New version available", {
+      buttons: ['refresh', 'dismiss']
+    });
 
-  toast.answer.then(function(answer) {
-    if (answer != 'refresh') return;
-    worker.postMessage({action: 'skipWaiting'});
-  });
+    toast.answer.then(function (answer) {
+      if (answer != 'refresh') return;
+      worker.postMessage({action: 'skipWaiting'});
+    });
+  }
 };

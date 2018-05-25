@@ -1,6 +1,7 @@
 import parseHTML from './../utils/parseHTML.js';
 import transition from './../utils/simple-transition.js';
 import closest from './../utils/closest.js';
+import Handlebars from './../utils/handlebars-v4.0.11';
 
 function Toast(text, duration, buttons) {
   var toast = this;

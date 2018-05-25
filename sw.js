@@ -1,4 +1,4 @@
-let staticCacheName = 'mws-rest-v34';
+let staticCacheName = 'mws-rest-v78';
 let contentImgsCache = 'mws-rest-imgs';
 let allCaches = [
   staticCacheName,
